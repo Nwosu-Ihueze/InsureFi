@@ -30,22 +30,23 @@ contract Registration {
 
 
     // Function to get price by year
-    function getPriceYear() internal view returns(uint){
+    function getPriceYear() internal view returns(uint amount){
         Car memory car = insuree[msg.sender];
         uint carYear = car.carYear;
         if (carYear <= 2005) {
-            return 0.01 ether;
+            amount = 0.01 ether;
         }
         if (carYear > 2005 && carYear <= 2012 ) {
-            return 0.03 ether;
+            amount = 0.03 ether;
         }
         if (carYear > 2012) {
-            return 0.05 ether;
+            amount = 0.05 ether;
         }
+        return amount;
     }
    
     // Function to get price by make
-    function getPriceMake() internal view returns(uint) {
+    function getPriceMake() internal view returns(uint amount) {
         Car memory car = insuree[msg.sender];
 
         bytes8 carMake = bytes8(keccak256(abi.encodePacked(car.carMake)));
@@ -60,47 +61,49 @@ contract Registration {
         bytes8 Nissan = bytes8(keccak256(abi.encodePacked("Nissan")));
 
         if (carMake == BMW){
-            return 0.02 ether;
+            amount = 0.02 ether;
         }
         if (carMake == Mercedes) {
-            return 0.02 ether;
+            amount = 0.02 ether;
         }
         if (carMake == Audi) {
-            return 0.02 ether;
+            amount = 0.02 ether;
         }
         if (carMake == GMC) {
-            return 0.015 ether;
+            amount = 0.015 ether;
         }
         if (carMake == Chevrolet) {
-            return 0.015 ether;
+            amount = 0.015 ether;
         }
         if (carMake == Ford) {
-            return 0.015 ether;
+            amount = 0.015 ether;
         }
         if (carMake == Toyota) {
-            return 0.010 ether;
+            amount = 0.010 ether;
         }
         if (carMake == Honda) {
-            return 0.010 ether;
+            amount = 0.010 ether;
         }
         if (carMake == Nissan) {
-           return 0.010 ether;
+           amount = 0.010 ether;
         }
+        return amount;
     }
 
     // Function to get price by mileage
-    function getPriceMileage() internal view returns(uint) {
+    function getPriceMileage() internal view returns(uint amount) {
         Car memory car = insuree[msg.sender];
         uint mileage = car.mileage;
         if (mileage <= 50000) {
-            return 0.03 ether;
+            amount = 0.03 ether;
         }
         if (mileage >50000 && mileage <= 100000) {
-            return 0.025 ether;
+            amount = 0.025 ether;
         }
         if (mileage > 100000) {
-            return 0.02 ether;
+            amount = 0.02 ether;
         }
+        return amount;
     }
 
     // Function to get total cost
@@ -109,14 +112,14 @@ contract Registration {
         return totatCost;
     }
     
-    function getInsuranceRate() public returns(bool){
-        Car memory car = insuree[msg.sender];
+    // function getInsuranceRate() public view returns(bool){
+    //     Car memory car = insuree[msg.sender];
 
-        uint insuranceRate = getCost() * 10000000 / 28*24*60*60;
+    //     uint insuranceRate = getCost() * 10000000 / 28*24*60*60;
 
-        if(streamRate >= insuranceRate) return true;
+    //     if(streamRate >= insuranceRate) return true;
 
-    }
+    // }
     
     // Function to register car
     function registerCar (string memory _carMake, string memory _carModel, uint16 _carYear, uint16 _mileage, string memory _licensePlate) public {
@@ -133,9 +136,9 @@ contract Registration {
         policyID += 1;
     }
     
-    // Function to make payment in Matic
-    function makePayment() public payable {
-        require(msg.value >= getCost(),"insufficient ether");
+    // Function to make payment 
+    function makePayment() public{
+        // require(msg.value >= getCost(),"insufficient ether");
         insured[msg.sender] = true;
     }
 

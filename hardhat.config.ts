@@ -29,10 +29,12 @@ const config: HardhatUserConfig = {
       url: process.env.ROPSTEN_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+        gas: 2100000,
+        gasPrice: 8000000000,
     },
     hardhat: {
       forking: {
-        url: "https://speedy-nodes-nyc.moralis.io/1081efd32566a9cdb0bd5ccf/polygon/mainnet",
+        url: "https://polygon-mumbai.g.alchemy.com/v2/-63obcV9oa_dIPaSHENcKoMk8z8O3guB",
       }
     }
   },

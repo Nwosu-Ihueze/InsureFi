@@ -3,7 +3,6 @@ pragma solidity ^0.8.4;
 
 import "./Registration.sol";
 import "./IERC20.sol";
-import "./IgetFlow.sol";
 import {
     IConstantFlowAgreementV1
 } from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
@@ -79,51 +78,53 @@ contract Claims is Registration{
     //     e.eventImgHash = _eventImgHash;
     // }
 
-    function flowDetails() public view returns(uint256 timestamp, int96 flowRate,uint256 deposit,uint256 owedDeposit){
-        (uint256 timestamp,int96 flowRate,uint256 deposit,uint256 owedDeposit) = _cfa.getFlow(_acceptedToken,msg.sender,address(this));
+    function flowDetails() public view returns(int96 flowRate){
+        (,flowRate,,) = _cfa.getFlow(_acceptedToken,msg.sender,address(this));
     }
 
-    function timeDifference() internal returns(uint){
+    function timeDifference() internal view returns(uint){
         uint time = block.timestamp - insuree[msg.sender].registrationTime;
         return time / 60 * 60 * 24;
     }
 
-    function getCostByAge() internal returns (uint) {
+    function getCostByAge() internal view returns (uint amount) {
         Holder memory user = holder[msg.sender];
         uint age = user.age;
         if(age <= 25) {
-            return 0.03 ether;
+            amount = 0.03 ether;
         }
         if(age > 25 && age <= 56) {
-            return 0.02 ether;
+            amount = 0.02 ether;
         }
         if(age > 56) {
-            return 0.01 ether;
+            amount = 0.01 ether;
         }
+        return amount;
     }
 
-    function getCostByYearsDriving() internal returns (uint) {
+    function getCostByYearsDriving() internal view returns (uint amount) {
         Holder memory user = holder[msg.sender];
         uint yearsDriving = user.yearsDriving;
         if(yearsDriving <= 5) {
-            return 0.03 ether;
+            amount = 0.03 ether;
         }
         if(yearsDriving > 5 && yearsDriving <= 15) {
-            return 0.02 ether;
+            amount = 0.02 ether;
         }
         if(yearsDriving > 15) {
-            return 0.01 ether;
+            amount = 0.01 ether;
         }
+        return amount;
     }
 
 
-    function getClaims() public returns(uint) {
-        // require(getInsuranceRate() == true, "Filing failed");
+    function getClaims() public view returns(uint) {
+        // require(flowDetails() >= 0.15 ether, "Filing failed");
         return getPriceYear() + getPriceMake() + getCostByAge() / getCostByYearsDriving() * timeDifference();
     }
 
     function makePayout() external {
         (bool sent) = InsureToken.transfer(msg.sender, getClaims()/10e10);
-         require(sent, "Claims failed");
+        require(sent, "Claims failed");
     }
 }

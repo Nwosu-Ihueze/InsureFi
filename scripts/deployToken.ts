@@ -14,8 +14,8 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const tokenAddress = "0xa598AB9a91454f49Ec09F5f20580D8ac854d0f6c"
-  const claimAddress = "0xEFB64aADD6cf95db44CBEC67258B1b2fCb25e88e"
+  const tokenAddress = "0x2D558E085C27D5FE9f7DDb76355f72A9d0D218A6"
+  const claimAddress = "0x92a5B68B469B726c2Ee71Ba80EbEd0f56c8Ad3E3"
   const InsureFi = await ethers.getContractAt("InsureFi",tokenAddress);
 //   const deployInsureFi = await InsureFi.deploy();
 
@@ -23,15 +23,15 @@ async function main() {
 
   console.log("Token address:", InsureFi.address);
 
-  const mint = await InsureFi.mint(claimAddress,"10000000000000000000000");
+  const mint = await InsureFi.mint(claimAddress,"1000000000000000000000000");
   console.log(mint);
 
 //   console.log("Sleeping.....");
 //   // Wait for etherscan to notice that the contract has been deployed
 //   await sleep(50000);
 
-//   // Verify the contract after deploying
-//   //@ts-ignore
+    //   Verify the contract after deploying
+    //   @ts-ignore
 //   await hre.run("verify:verify", {
 //     address: deployInsureFi.address,
 //     constructorArguments: [],
